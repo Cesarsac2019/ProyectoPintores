@@ -21,11 +21,34 @@ class Pintor(models.Model):
 class Puntura(models.Model):
     nombre    = models.CharField(max_length=60)
     codigo    = models.IntegerField()
-    anio      = models.IntegerField()
+    color     = models.CharField(max_length=60)
 
 
-    actores   = models.ManyToManyField(Actor, through='Actuacion')
+pinturas   = models.ManyToManyField(Pintor, through='Actuacion')
 
     def __str__(self):
 
         return self.nombre
+
+
+class Color (models.Model):
+
+    pintor = models.ForeigxnKey(Pintor, on_delete=models.CASCADE)
+
+    pintura = models.ForeignKey(Puntura, on_delete=models.CASCADE)
+
+class ActuacionInLine(admin.TabularInline):
+
+    model = Color
+
+    extra = 1
+
+
+class PintorAdmin(admin.ModelAdmin):
+
+    inlines = (ActuacionInLine,)
+
+
+class PinturaAdmin (admin.ModelAdmin):
+
+    inlines = (ActuacionInLine,)
